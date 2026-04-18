@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 
 // Servira React frontend
-const frontendPath = path.join(__dirname, "../../../quiz-app/dist");
+const frontendPath = path.join(__dirname, "../../../quiz-app/dist/public");
 app.use(express.static(frontendPath));
 app.get("*splat", (_req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
