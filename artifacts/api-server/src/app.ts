@@ -5,6 +5,7 @@ import router from "./routes";
 import { logger } from "./lib/logger";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,8 +35,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 
-// Servira React frontend
-const frontendPath = path.join(__dirname, "../../../quiz-app/dist/public");
+const possiblePaths = [
+  path.join(__dirname, "../../quiz-app/dist/public"),
+  path.join(__dirname, "../../quiz-app/dist"),
+  path.join(__dirname, "../../../artifacts/quiz-app/dist/public"),
+  path.join(__dirname, "../../../artifacts/quiz-app/dist"),
+];
+
+const frontendPath = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0];
+
+console.log("Frontend path:", frontendPath);
+console.log("Exists:", fs.existsSync(frontendPath));
+
 app.use(express.static(frontendPath));
 app.get("*splat", (_req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
