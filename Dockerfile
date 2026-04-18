@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --no-frozen-lockfile --ignore-scripts
 
 RUN pnpm --filter api-server build
 
